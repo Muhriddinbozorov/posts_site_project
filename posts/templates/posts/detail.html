@@ -1,0 +1,58 @@
+{% extends "base.html" %}
+{% load crispy_forms_tags %}
+{% block title %}Post Detail Page{% endblock %}
+
+{% block content %}
+    <div class="row mb-3">
+        <div class="col-3">
+            <img class="post_pic" src="{{ post.post_picture.url }}" alt="post picture">
+        </div>
+
+        <div class="col-6 ms-3">
+
+            <h3>{{ post.title }}</h3>
+
+            <span>
+                Muallif:
+                {% for post_author in post.postauthor_set.all %}
+                    {{ post_author.author.full_name }}
+                {% endfor %}
+            </span>
+            <p>
+                {{ post.description }}
+            </p>
+
+        </div>
+    </div>
+    <div class="row mb-4">
+        <div class="col-6">
+            <form method="post" action="{% url 'posts:reviews' post.id %}">
+                {% csrf_token %}
+                {{ review_form | crispy }}
+                <button class="btn btn-success">Add review</button>
+            </form>
+        </div>
+    </div>
+    {% if post.postreview_set.exists %}
+
+        <h4>Reviews</h4><hr>
+
+        {% for review in post.postreview_set.all %}
+            <div class="row mb-3">
+                <div class="col-1 me-3">
+                    <img class="small_profile-pic" src="{{ review.user.profile_picture.url }}" alt="">
+                </div>
+                <div class="col-7">
+                    <b>{{ review.user.username }}</b> rated it {{ review.stars_given }} stars <span class="fw-lighter">{{ review.created_at }}</span>
+                    {% if review.user == request.user %}
+                        <a href="{% url 'posts:edit-review' post.id review.id %}"><i class="bi bi-pencil"></i></a>
+                        <a href="{% url 'posts:confirm-delete-review' post.id review.id %}"><i class="bi bi-trash3"></i></a>
+                    {% endif %}
+                    <p class="mt-2 font-monospace fs-6">{{ review.comment }}</p>
+                </div>
+            </div>
+        {% endfor %}
+
+    {% endif %}
+
+{% endblock %}

@@ -1,0 +1,75 @@
+{% extends "base.html" %}
+
+{% block title %}Postlar{% endblock %}
+
+{% block content %}
+
+<div class="container2">
+    <!-- Yangi postlar -->
+    <div class="column mb-5">
+        <h2>Yangi postlar</h2>
+        <br>
+        {% for post in new_posts %}
+            <div class="post">
+                <a href="{% url 'posts:detail' post.id %}">
+                    <img class="post_pic" src="{{ post.post_picture.url }}" alt="Post image">
+                    <h3>{{ post.title }}</h3>
+                    <p>{{ post.description|truncatewords:5 }}</p>
+                </a>
+                <p>
+                    <small>
+                        Yaratilgan sana:
+                        {% if post.created_at %}
+                            {{ post.created_at | date:"Y-m-d  H:i" }}
+                        {% endif %}
+                    </small>
+                </p>
+
+            </div><hr><br>
+        {% endfor %}
+    </div>
+
+    <!-- Yaqinda ko‘rilganlar -->
+    <div class="column mb-5">
+        <h2>Yaqinda ko‘rilganlar</h2>
+        {% for post in recent_viewed_posts %}
+            <div class="post">
+                <a href="{% url 'posts:detail' post.id %}">
+                     <img class="post_pic" src="{{ post.post_picture.url }}" alt="Post image">
+                    <h3>{{ post.title }}</h3>
+                    <p>{{ post.description|truncatewords:5 }}</p>
+
+                </a>
+                <p>
+                    <small>Ko'rilgan sana: {{ post.last_viewed_at | date:"Y-m-d  H:i" }}</small>
+                </p>
+            </div><hr><br>
+        {% endfor %}
+    </div>
+
+    <!-- Eng ko‘p ko‘rilganlar -->
+    <div class="column mb-5">
+        <h2>Eng ko‘p ko‘rilganlar</h2>
+        {% for post in most_viewed_posts %}
+            {% if post.views_count > 0 %}
+                <div class="post">
+                    <a href="{% url 'posts:detail' post.id %}">
+                        <img class="post_pic" src="{{ post.post_picture.url }}" alt="Post image">
+                        <h3>{{ post.title }}</h3>
+                        <p>{{ post.description|truncatewords:5 }}</p>
+                    </a>
+                        <p>
+                            <small>
+                                Ko'rishlar soni: {{ post.views_count }}
+                            </small>
+                        </p>
+
+                </div><hr><br>
+            {% endif %}
+        {% empty %}
+            <p>Hozircha hech qanday post ko'rilmagan.</p>
+        {% endfor %}
+    </div>
+</div>
+
+{% endblock %}

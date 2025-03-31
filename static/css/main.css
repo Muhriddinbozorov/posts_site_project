@@ -1,0 +1,32 @@
+.profile-pic {
+    width: 200px;
+    height: 200px;
+    border-radius: 50%;
+}
+.small_profile-pic {
+    width: 100px;
+    height: 100px;
+    border-radius: 50%;
+}
+
+.post_pic {
+    width: 250px;
+    height: 300px;
+}
+
+.post_icon{
+    width: 200px;
+    height: 150px;
+
+}
+
+.container2 {
+    display: flex;
+    justify-content: space-between;
+}
+
+.column {
+    width: 32%;
+    border: 1px solid #ccc;
+    padding: 10px;
+}
